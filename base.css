@@ -1,0 +1,152 @@
+/*
+  La plus 社内ツール共通スタイル（freee会計の画面を参考）
+  使い方：ツールの web/ にこのファイルをコピーし、<link rel="stylesheet" href="base.css"> をツール固有の CSS より前に読む。
+  色・余白・角丸は変数で変える。影・グラデーション・装飾線は使わない（.cursor/rules/design-no-ai-look.mdc）。
+*/
+:root {
+  --fr-blue: #285bc6;
+  --fr-blue-hover: #1f4aa8;
+  --fr-blue-soft: #ebf3fe;
+  --fr-blue-active: #dde7ff;
+  --fr-side: #f5f8ff;
+  --fr-filter: #f7f5f6;
+  --fr-bg: #ffffff;
+  --fr-ink: #393c43;
+  --fr-sub: #6b6f78;
+  --fr-line: #dfe2e8;
+  --fr-line-strong: #b9bcc4;
+  --fr-th: #f5f6f8;
+  --fr-ok: #1e6b3c;
+  --fr-ok-soft: #ceebd9;
+  --fr-err: #b42318;
+  --fr-err-soft: #fde4e1;
+  --fr-warn: #8a5300;
+  --fr-warn-soft: #fdefd3;
+  --fr-muted-soft: #eceef2;
+  --fr-radius: 6px;
+  --fr-side-w: 208px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  background: var(--fr-bg);
+  color: var(--fr-ink);
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+a { color: var(--fr-blue); }
+h1, h2, h3 { margin: 0; line-height: 1.35; }
+
+/* ---------- 全体の枠：左にメニュー、右に本文 ---------- */
+.fr-app { display: grid; grid-template-columns: var(--fr-side-w) minmax(0, 1fr); min-height: 100vh; }
+.fr-side { background: var(--fr-side); padding: 12px 8px 24px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.fr-brand { display: flex; align-items: center; gap: 8px; padding: 6px 10px 14px; font-weight: 700; font-size: 15px; color: var(--fr-blue); text-decoration: none; }
+.fr-nav { display: flex; flex-direction: column; gap: 2px; }
+.fr-nav .fr-group { font-size: 11px; color: var(--fr-sub); padding: 12px 10px 4px; }
+.fr-nav a {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--fr-radius);
+  color: var(--fr-ink); text-decoration: none; font-size: 14px;
+}
+.fr-nav a:hover { background: #e9effc; }
+.fr-nav a.on { background: var(--fr-blue-active); font-weight: 600; }
+.fr-nav svg { width: 18px; height: 18px; flex: 0 0 18px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+.fr-body { min-width: 0; display: flex; flex-direction: column; }
+
+/* 上の帯：右に期間・会社名などの情報 */
+.fr-top { background: var(--fr-blue-soft); display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 8px 24px; font-size: 13px; }
+.fr-top .fr-tag { border: 1px solid var(--fr-blue); color: var(--fr-blue); border-radius: 4px; padding: 0 8px; font-size: 12px; background: #fff; }
+
+/* ページ見出しの帯：タイトル＋切替タブ＋右端のボタン */
+.fr-head { background: var(--fr-blue-soft); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 6px 24px 14px; }
+.fr-head h1 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.fr-head h1 svg { width: 22px; height: 22px; stroke: var(--fr-blue); fill: none; stroke-width: 1.7; }
+.fr-head .fr-head-end { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.fr-main { padding: 20px 24px 48px; }
+
+/* ---------- ボタン ---------- */
+button, .fr-btn, input, select, textarea { font: inherit; color: inherit; }
+.fr-btn, button {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;
+  background: #fff; color: var(--fr-ink); border: 1px solid var(--fr-line-strong); border-radius: var(--fr-radius);
+  padding: 6px 14px; font-size: 14px; line-height: 1.5; text-decoration: none;
+}
+.fr-btn:hover, button:hover { background: #f4f6fa; }
+.fr-btn.primary, button.primary { background: var(--fr-blue); border-color: var(--fr-blue); color: #fff; font-weight: 600; }
+.fr-btn.primary:hover, button.primary:hover { background: var(--fr-blue-hover); }
+.fr-btn.quiet, button.quiet { border-color: transparent; background: transparent; color: var(--fr-blue); }
+.fr-btn.quiet:hover, button.quiet:hover { background: #eef3fd; }
+.fr-btn.go::after, button.go::after { content: "›"; font-size: 18px; line-height: 1; margin-left: 2px; }
+button:disabled, .fr-btn[aria-disabled=true] { opacity: .5; cursor: default; }
+
+/* 切替タブ（個別入力／まとめて入力 の形）：青枠でつながったボタン */
+.fr-tabs { display: inline-flex; border: 1px solid var(--fr-blue); border-radius: var(--fr-radius); overflow: hidden; background: #fff; }
+.fr-tabs button, .fr-tabs a { border: 0; border-radius: 0; padding: 4px 16px; color: var(--fr-blue); background: #fff; font-weight: 600; font-size: 13px; text-decoration: none; }
+.fr-tabs > * + * { border-left: 1px solid var(--fr-blue); }
+.fr-tabs .on { background: var(--fr-blue); color: #fff; }
+
+/* ---------- 入力 ---------- */
+input, select, textarea {
+  background: #fff; border: 1px solid var(--fr-line-strong); border-radius: var(--fr-radius); padding: 6px 10px;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--fr-blue-active); border-color: var(--fr-blue); }
+
+/* 絞り込みパネル：灰色の面に「見出し＋入力」を並べる */
+.fr-filter { background: var(--fr-filter); border-radius: var(--fr-radius); padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; }
+.fr-field { display: flex; flex-direction: column; gap: 4px; }
+.fr-field > .fr-label { font-size: 12px; color: var(--fr-ink); }
+
+/* 区切りボタン（すべて／未処理／処理済み の形）：選んだものを濃い枠と太字に */
+.fr-seg { display: inline-flex; }
+.fr-seg button { border-radius: 0; margin-left: -1px; padding: 5px 12px; font-size: 13px; background: #fff; }
+.fr-seg button:first-child { border-radius: var(--fr-radius) 0 0 var(--fr-radius); margin-left: 0; }
+.fr-seg button:last-child { border-radius: 0 var(--fr-radius) var(--fr-radius) 0; }
+.fr-seg button.on { border-color: var(--fr-ink); font-weight: 700; position: relative; z-index: 1; }
+
+/* ---------- お知らせ・数値・状態 ---------- */
+.fr-notice { background: var(--fr-blue-soft); border-radius: var(--fr-radius); padding: 12px 16px; }
+.fr-notice.warn { background: var(--fr-warn-soft); color: #5c3800; }
+.fr-notice.err { background: var(--fr-err-soft); color: #7a1610; }
+.fr-row-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
+  background: #fff; border: 1px solid var(--fr-line); border-radius: var(--fr-radius); padding: 14px 16px; font-weight: 600;
+}
+.fr-row-link::after { content: "›"; font-size: 20px; color: var(--fr-sub); }
+
+.fr-kpis { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.fr-kpi { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; font-size: 13px; color: var(--fr-sub); }
+.fr-kpi b { font-size: 22px; color: var(--fr-ink); font-weight: 700; white-space: nowrap; }
+.fr-kpi.err b { color: var(--fr-err); }
+.fr-kpi.warn b { color: var(--fr-warn); }
+.fr-kpi.ok b { color: var(--fr-ok); }
+
+.fr-pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; padding: 1px 8px; font-size: 12px; font-weight: 600; background: var(--fr-muted-soft); color: var(--fr-ink); white-space: nowrap; }
+.fr-pill.ok { background: var(--fr-ok-soft); color: var(--fr-ok); }
+.fr-pill.err { background: var(--fr-err-soft); color: var(--fr-err); }
+.fr-pill.warn { background: var(--fr-warn-soft); color: var(--fr-warn); }
+.fr-pill.info { background: var(--fr-blue-active); color: var(--fr-blue); }
+
+/* ---------- 表 ---------- */
+.fr-table { width: 100%; border-collapse: collapse; background: #fff; }
+.fr-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--fr-sub); background: var(--fr-th); padding: 8px 10px; position: sticky; top: 0; z-index: 2; }
+.fr-table td { padding: 10px; vertical-align: top; border-top: 1px solid var(--fr-line); }
+
+/* ---------- スマホ：メニューを上の横スクロールに ---------- */
+@media (max-width: 900px) {
+  .fr-app { grid-template-columns: 1fr; }
+  .fr-side { position: static; height: auto; padding: 8px; display: flex; align-items: center; gap: 4px; overflow-x: auto; }
+  .fr-brand { padding: 4px 8px; flex: 0 0 auto; }
+  .fr-nav { flex-direction: row; gap: 2px; }
+  .fr-nav .fr-group { display: none; }
+  .fr-nav a { flex: 0 0 auto; padding: 6px 10px; font-size: 13px; }
+  .fr-top { padding: 6px 14px; justify-content: flex-start; flex-wrap: wrap; }
+  .fr-head { padding: 8px 14px 12px; }
+  .fr-main { padding: 14px 12px 40px; }
+  .fr-field { min-width: 0; max-width: 100%; }
+  .fr-seg { max-width: 100%; overflow-x: auto; }
+  .fr-seg button { flex: 0 0 auto; }
+}

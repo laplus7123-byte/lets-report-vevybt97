@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Let's 工数カウンター</title>
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="fr-app">
+  <aside class="fr-side">
+    <a class="fr-brand" href="#dash">Let's 工数カウンター</a>
+    <nav class="fr-nav" id="nav">
+      <span class="fr-group">記録</span>
+      <a href="#dash" data-page="dash"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>ダッシュボード</a>
+      <a href="#log" data-page="log"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>依頼ログ</a>
+      <span class="fr-group">先方</span>
+      <a href="#report" data-page="report"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>先方ページ</a>
+      <span class="fr-group">設定</span>
+      <a href="#settings" data-page="settings"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>期間・料金</a>
+    </nav>
+  </aside>
+
+  <div class="fr-body">
+    <div class="fr-top">
+      <label class="top-period">期間
+        <select id="periodSel"></select>
+      </label>
+      <span class="fr-tag" id="clientTag">株式会社Let's</span>
+      <span id="saved" class="saved"></span>
+    </div>
+    <div class="fr-head">
+      <h1 id="pageTitle"></h1>
+      <div class="fr-head-end" id="headEnd"></div>
+    </div>
+    <main class="fr-main" id="main"><p class="empty">読み込み中…</p></main>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script src="../calc.js"></script>
+<script src="../store.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

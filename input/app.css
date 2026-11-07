@@ -1,0 +1,114 @@
+/* Let's 工数カウンター（base.css の上に読む） */
+.top-period { display: inline-flex; align-items: center; gap: 8px; }
+.top-period select { padding: 2px 8px; font-size: 13px; }
+.saved { color: var(--fr-sub); font-size: 12px; }
+code { font-size: 12px; background: var(--fr-muted-soft); border-radius: 4px; padding: 1px 6px; }
+.empty, .help { color: var(--fr-sub); font-size: 13px; }
+.help { margin: 6px 0 10px; }
+.sub { display: block; font-size: 12px; color: var(--fr-sub); }
+.num { text-align: right; white-space: nowrap; }
+.nowrap { white-space: nowrap; }
+.strong { font-weight: 700; }
+.neg { color: var(--fr-err) !important; }
+button.danger { color: var(--fr-err); }
+.fr-main > * + * { margin-top: 16px; }
+.fr-main h2 { font-size: 16px; font-weight: 700; }
+
+/* 計測 */
+.timer { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; background: var(--fr-filter); border-radius: var(--fr-radius); padding: 14px 16px; }
+.timer .grow { flex: 1 1 260px; }
+.timer .grow input { width: 100%; }
+.timer.on { background: var(--fr-blue-soft); align-items: center; }
+.timer-main { display: flex; align-items: center; gap: 10px; flex: 1 1 260px; min-width: 0; }
+.timer-req { font-size: 16px; }
+.timer-cat { color: var(--fr-sub); font-size: 13px; }
+.timer-clock { display: flex; flex-direction: column; align-items: flex-end; }
+.timer-clock b { font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.timer-clock span { font-size: 12px; color: var(--fr-sub); }
+.timer-act { display: flex; gap: 8px; }
+
+/* 残高 */
+.hero { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 48px; padding: 8px 0 0; }
+.hero-main { display: flex; flex-direction: column; }
+.hero-main b { font-size: 44px; line-height: 1.15; color: var(--fr-blue); font-variant-numeric: tabular-nums; }
+.hero-label { font-size: 13px; color: var(--fr-sub); }
+.bar { height: 14px; background: var(--fr-muted-soft); border-radius: 7px; overflow: hidden; }
+.fr-main > .bar { margin-top: 14px; }
+.bar span { display: block; height: 100%; background: var(--fr-blue); }
+.fr-main > .bar-cap { margin-top: 6px; font-size: 12px; color: var(--fr-sub); }
+
+.grid2 { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
+.panel { border: 1px solid var(--fr-line); border-radius: var(--fr-radius); padding: 14px 16px; }
+.panel h2 { margin-bottom: 8px; }
+.panel svg { display: block; }
+.cat-row { display: grid; grid-template-columns: 6em minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 0; }
+.cat-name { font-size: 13px; }
+.cat-bar { height: 10px; background: var(--fr-muted-soft); border-radius: 5px; overflow: hidden; }
+.cat-bar span { display: block; height: 100%; background: var(--fr-blue); }
+.cat-val { text-align: right; font-weight: 600; white-space: nowrap; }
+.cat-val small { display: block; font-weight: 400; font-size: 11px; color: var(--fr-sub); }
+
+.sec { margin-top: 28px !important; }
+.sec-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.rtable th { position: static; }
+.rtable th.num { text-align: right; }
+.rtable td.ops { white-space: nowrap; text-align: right; }
+.rtable tr.editing td { background: var(--fr-blue-soft); }
+
+/* 記録フォーム */
+.form-title { margin-top: 24px !important; }
+.entry { align-items: flex-end; }
+.entry .grow { flex: 1 1 260px; }
+.entry .grow input { width: 100%; }
+.min-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.min-input { width: 80px; }
+.entry-end { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.preview { font-size: 13px; color: var(--fr-blue); font-weight: 600; }
+
+.log-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 24px !important; }
+.log-filter input[type=search] { width: 220px; }
+.log-kpis { margin-left: auto; }
+.log-kpis .fr-kpi b { font-size: 18px; }
+
+/* 先方レポート */
+.share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; background: var(--fr-filter); border-radius: var(--fr-radius); padding: 14px 16px; }
+.share-main { display: flex; flex-direction: column; gap: 2px; flex: 1 1 320px; min-width: 0; }
+.share-main .fr-label { font-size: 12px; }
+.share-url { font-weight: 600; word-break: break-all; }
+.ok-notice { background: var(--fr-ok-soft); color: var(--fr-ok); }
+.frame-wrap { border: 1px solid var(--fr-line); border-radius: var(--fr-radius); overflow: hidden; }
+.frame-wrap iframe { display: block; width: 100%; height: calc(100vh - 220px); min-height: 640px; border: 0; }
+
+/* 設定 */
+.num-input { width: 120px; text-align: right; }
+.settings-table input { width: 100%; }
+.settings-table input[type=date] { min-width: 140px; }
+.cats { width: 100%; max-width: 640px; }
+.save-row { margin-top: 20px !important; }
+
+.setup-steps { margin: 16px 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 10px; }
+.setup-steps .fr-btn { margin-right: 8px; }
+#setupForm .grow { flex: 1 1 320px; }
+#setupForm input { width: 100%; }
+.device-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--fr-ink); color: #fff; padding: 10px 18px; border-radius: var(--fr-radius); font-size: 14px; z-index: 50; }
+
+@media (max-width: 900px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .hero-main b { font-size: 36px; }
+  .timer-clock { align-items: flex-start; }
+  .entry-end { margin-left: 0; width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+  .log-kpis { margin-left: 0; }
+  .log-filter input[type=search] { width: 100%; }
+  .rtable thead { display: none; }
+  .rtable, .rtable tbody, .rtable tr, .rtable td { display: block; width: 100%; }
+  .rtable tr { border-top: 1px solid var(--fr-line); padding: 10px 0; }
+  .rtable td { border: 0; padding: 2px 0; display: flex; justify-content: space-between; gap: 12px; text-align: left; }
+  .rtable td[data-label]::before { content: attr(data-label); color: var(--fr-sub); font-size: 12px; font-weight: 400; flex: 0 0 auto; }
+  .rtable td[data-label="依頼"] { display: block; font-weight: 600; }
+  .rtable td[data-label="依頼"]::before { display: none; }
+  .rtable td.ops { justify-content: flex-end; }
+  .settings-table td { display: flex; flex-direction: column; gap: 2px; }
+  .frame-wrap iframe { height: 80vh; min-height: 0; }
+}

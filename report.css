@@ -1,0 +1,65 @@
+/* 先方レポート。base.css の上に読む。 */
+.rp { max-width: 880px; margin: 0 auto; padding: 40px 32px 56px; }
+.rp-loading, .rp-empty { color: var(--fr-sub); }
+
+.rp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 20px; }
+.rp-to { margin: 0 0 4px; font-size: 15px; }
+.rp-head h1 { font-size: 26px; font-weight: 700; }
+.rp-meta { margin: 6px 0 0; color: var(--fr-sub); }
+.rp-meta .nowrap { white-space: nowrap; }
+.rp-period { padding: 2px 8px; font-size: 14px; }
+@media print { .rp-period { border: 0; padding: 0; appearance: none; } }
+.rp-from { text-align: right; color: var(--fr-sub); font-size: 13px; }
+.rp-from p { margin: 0; }
+
+.rp-hero { display: flex; flex-wrap: wrap; gap: 20px 48px; align-items: flex-end; background: var(--fr-blue-soft); border-radius: var(--fr-radius); padding: 22px 24px; }
+.rp-balance { display: flex; flex-direction: column; gap: 2px; }
+.rp-balance b { font-size: 44px; line-height: 1.15; font-weight: 700; color: var(--fr-blue); letter-spacing: .01em; }
+.rp-balance b.neg { color: var(--fr-err); }
+.rp-label { font-size: 13px; color: var(--fr-sub); }
+.rp-facts { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); gap: 8px 32px; margin: 0; }
+.rp-facts div { display: flex; flex-direction: column; }
+.rp-facts dt { font-size: 12px; color: var(--fr-sub); }
+.rp-facts dd { margin: 0; font-size: 17px; font-weight: 600; }
+
+.rp-bar { height: 12px; background: var(--fr-muted-soft); border-radius: 6px; overflow: hidden; margin-top: 18px; }
+.rp-bar span { display: block; height: 100%; background: var(--fr-blue); }
+.rp-bar-cap { margin: 6px 0 0; font-size: 12px; color: var(--fr-sub); }
+
+.rp-sec { margin-top: 36px; }
+.rp-sec h2 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.rp-chart svg { display: block; }
+
+.rp-table .num { text-align: right; white-space: nowrap; }
+.rp-table .nowrap { white-space: nowrap; }
+.rp-table .strong { font-weight: 700; }
+.rp-table .neg { color: var(--fr-err); }
+.rp-table th { position: static; }
+.rp-table th.num { text-align: right; }
+.rp-table tfoot td { font-weight: 700; background: var(--fr-th); border-top: 1px solid var(--fr-line-strong); }
+.rp-sub { display: block; font-size: 12px; color: var(--fr-sub); }
+.rp-start td { color: var(--fr-sub); }
+.rp-note { margin-top: 28px; font-size: 12px; color: var(--fr-sub); }
+
+@media (max-width: 640px) {
+  .rp { padding: 24px 16px 40px; }
+  .rp-head h1 { font-size: 22px; }
+  .rp-from { text-align: left; }
+  .rp-hero { padding: 18px 16px; }
+  .rp-balance b { font-size: 36px; }
+  .rp-table thead { display: none; }
+  .rp-table, .rp-table tbody, .rp-table tfoot, .rp-table tr, .rp-table td { display: block; width: 100%; }
+  .rp-table tr { border-top: 1px solid var(--fr-line); padding: 10px 0; }
+  .rp-table td { border: 0; padding: 2px 0; text-align: left !important; display: flex; justify-content: space-between; gap: 12px; }
+  .rp-table td:empty { display: none; }
+  .rp-table td[data-label]::before { content: attr(data-label); color: var(--fr-sub); font-size: 12px; font-weight: 400; flex: 0 0 auto; }
+  .rp-table td[data-label="ご依頼"] { display: block; font-weight: 600; }
+  .rp-table td[data-label="ご依頼"]::before { display: none; }
+  .rp-table tfoot td { background: none; border: 0; }
+}
+
+@media print {
+  .rp { padding: 0; max-width: none; }
+  .rp-sec { break-inside: avoid-page; }
+  .rp-detail { break-inside: auto; }
+}
