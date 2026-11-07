@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>作業時間のご報告</title>
+
+<style>
+/*
+  La plus 社内ツール共通スタイル（freee会計の画面を参考）
+  使い方：ツールの web/ にこのファイルをコピーし、<link rel="stylesheet" href="base.css"> をツール固有の CSS より前に読む。
+  色・余白・角丸は変数で変える。影・グラデーション・装飾線は使わない（.cursor/rules/design-no-ai-look.mdc）。
+*/
+:root {
+  --fr-blue: #285bc6;
+  --fr-blue-hover: #1f4aa8;
+  --fr-blue-soft: #ebf3fe;
+  --fr-blue-active: #dde7ff;
+  --fr-side: #f5f8ff;
+  --fr-filter: #f7f5f6;
+  --fr-bg: #ffffff;
+  --fr-ink: #393c43;
+  --fr-sub: #6b6f78;
+  --fr-line: #dfe2e8;
+  --fr-line-strong: #b9bcc4;
+  --fr-th: #f5f6f8;
+  --fr-ok: #1e6b3c;
+  --fr-ok-soft: #ceebd9;
+  --fr-err: #b42318;
+  --fr-err-soft: #fde4e1;
+  --fr-warn: #8a5300;
+  --fr-warn-soft: #fdefd3;
+  --fr-muted-soft: #eceef2;
+  --fr-radius: 6px;
+  --fr-side-w: 208px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  background: var(--fr-bg);
+  color: var(--fr-ink);
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+a { color: var(--fr-blue); }
+h1, h2, h3 { margin: 0; line-height: 1.35; }
+
+/* ---------- 全体の枠：左にメニュー、右に本文 ---------- */
+.fr-app { display: grid; grid-template-columns: var(--fr-side-w) minmax(0, 1fr); min-height: 100vh; }
+.fr-side { background: var(--fr-side); padding: 12px 8px 24px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.fr-brand { display: flex; align-items: center; gap: 8px; padding: 6px 10px 14px; font-weight: 700; font-size: 15px; color: var(--fr-blue); text-decoration: none; }
+.fr-nav { display: flex; flex-direction: column; gap: 2px; }
+.fr-nav .fr-group { font-size: 11px; color: var(--fr-sub); padding: 12px 10px 4px; }
+.fr-nav a {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--fr-radius);
+  color: var(--fr-ink); text-decoration: none; font-size: 14px;
+}
+.fr-nav a:hover { background: #e9effc; }
+.fr-nav a.on { background: var(--fr-blue-active); font-weight: 600; }
+.fr-nav svg { width: 18px; height: 18px; flex: 0 0 18px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+.fr-body { min-width: 0; display: flex; flex-direction: column; }
+
+/* 上の帯：右に期間・会社名などの情報 */
+.fr-top { background: var(--fr-blue-soft); display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 8px 24px; font-size: 13px; }
+.fr-top .fr-tag { border: 1px solid var(--fr-blue); color: var(--fr-blue); border-radius: 4px; padding: 0 8px; font-size: 12px; background: #fff; }
+
+/* ページ見出しの帯：タイトル＋切替タブ＋右端のボタン */
+.fr-head { background: var(--fr-blue-soft); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 6px 24px 14px; }
+.fr-head h1 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.fr-head h1 svg { width: 22px; height: 22px; stroke: var(--fr-blue); fill: none; stroke-width: 1.7; }
+.fr-head .fr-head-end { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.fr-main { padding: 20px 24px 48px; }
+
+/* ---------- ボタン ---------- */
+button, .fr-btn, input, select, textarea { font: inherit; color: inherit; }
+.fr-btn, button {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;
+  background: #fff; color: var(--fr-ink); border: 1px solid var(--fr-line-strong); border-radius: var(--fr-radius);
+  padding: 6px 14px; font-size: 14px; line-height: 1.5; text-decoration: none;
+}
+.fr-btn:hover, button:hover { background: #f4f6fa; }
+.fr-btn.primary, button.primary { background: var(--fr-blue); border-color: var(--fr-blue); color: #fff; font-weight: 600; }
+.fr-btn.primary:hover, button.primary:hover { background: var(--fr-blue-hover); }
+.fr-btn.quiet, button.quiet { border-color: transparent; background: transparent; color: var(--fr-blue); }
+.fr-btn.quiet:hover, button.quiet:hover { background: #eef3fd; }
+.fr-btn.go::after, button.go::after { content: "›"; font-size: 18px; line-height: 1; margin-left: 2px; }
+button:disabled, .fr-btn[aria-disabled=true] { opacity: .5; cursor: default; }
+
+/* 切替タブ（個別入力／まとめて入力 の形）：青枠でつながったボタン */
+.fr-tabs { display: inline-flex; border: 1px solid var(--fr-blue); border-radius: var(--fr-radius); overflow: hidden; background: #fff; }
+.fr-tabs button, .fr-tabs a { border: 0; border-radius: 0; padding: 4px 16px; color: var(--fr-blue); background: #fff; font-weight: 600; font-size: 13px; text-decoration: none; }
+.fr-tabs > * + * { border-left: 1px solid var(--fr-blue); }
+.fr-tabs .on { background: var(--fr-blue); color: #fff; }
+
+/* ---------- 入力 ---------- */
+input, select, textarea {
+  background: #fff; border: 1px solid var(--fr-line-strong); border-radius: var(--fr-radius); padding: 6px 10px;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--fr-blue-active); border-color: var(--fr-blue); }
+
+/* 絞り込みパネル：灰色の面に「見出し＋入力」を並べる */
+.fr-filter { background: var(--fr-filter); border-radius: var(--fr-radius); padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; }
+.fr-field { display: flex; flex-direction: column; gap: 4px; }
+.fr-field > .fr-label { font-size: 12px; color: var(--fr-ink); }
+
+/* 区切りボタン（すべて／未処理／処理済み の形）：選んだものを濃い枠と太字に */
+.fr-seg { display: inline-flex; }
+.fr-seg button { border-radius: 0; margin-left: -1px; padding: 5px 12px; font-size: 13px; background: #fff; }
+.fr-seg button:first-child { border-radius: var(--fr-radius) 0 0 var(--fr-radius); margin-left: 0; }
+.fr-seg button:last-child { border-radius: 0 var(--fr-radius) var(--fr-radius) 0; }
+.fr-seg button.on { border-color: var(--fr-ink); font-weight: 700; position: relative; z-index: 1; }
+
+/* ---------- お知らせ・数値・状態 ---------- */
+.fr-notice { background: var(--fr-blue-soft); border-radius: var(--fr-radius); padding: 12px 16px; }
+.fr-notice.warn { background: var(--fr-warn-soft); color: #5c3800; }
+.fr-notice.err { background: var(--fr-err-soft); color: #7a1610; }
+.fr-row-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
+  background: #fff; border: 1px solid var(--fr-line); border-radius: var(--fr-radius); padding: 14px 16px; font-weight: 600;
+}
+.fr-row-link::after { content: "›"; font-size: 20px; color: var(--fr-sub); }
+
+.fr-kpis { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.fr-kpi { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; font-size: 13px; color: var(--fr-sub); }
+.fr-kpi b { font-size: 22px; color: var(--fr-ink); font-weight: 700; white-space: nowrap; }
+.fr-kpi.err b { color: var(--fr-err); }
+.fr-kpi.warn b { color: var(--fr-warn); }
+.fr-kpi.ok b { color: var(--fr-ok); }
+
+.fr-pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; padding: 1px 8px; font-size: 12px; font-weight: 600; background: var(--fr-muted-soft); color: var(--fr-ink); white-space: nowrap; }
+.fr-pill.ok { background: var(--fr-ok-soft); color: var(--fr-ok); }
+.fr-pill.err { background: var(--fr-err-soft); color: var(--fr-err); }
+.fr-pill.warn { background: var(--fr-warn-soft); color: var(--fr-warn); }
+.fr-pill.info { background: var(--fr-blue-active); color: var(--fr-blue); }
+
+/* ---------- 表 ---------- */
+.fr-table { width: 100%; border-collapse: collapse; background: #fff; }
+.fr-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--fr-sub); background: var(--fr-th); padding: 8px 10px; position: sticky; top: 0; z-index: 2; }
+.fr-table td { padding: 10px; vertical-align: top; border-top: 1px solid var(--fr-line); }
+
+/* ---------- スマホ：メニューを上の横スクロールに ---------- */
+@media (max-width: 900px) {
+  .fr-app { grid-template-columns: 1fr; }
+  .fr-side { position: static; height: auto; padding: 8px; display: flex; align-items: center; gap: 4px; overflow-x: auto; }
+  .fr-brand { padding: 4px 8px; flex: 0 0 auto; }
+  .fr-nav { flex-direction: row; gap: 2px; }
+  .fr-nav .fr-group { display: none; }
+  .fr-nav a { flex: 0 0 auto; padding: 6px 10px; font-size: 13px; }
+  .fr-top { padding: 6px 14px; justify-content: flex-start; flex-wrap: wrap; }
+  .fr-head { padding: 8px 14px 12px; }
+  .fr-main { padding: 14px 12px 40px; }
+  .fr-field { min-width: 0; max-width: 100%; }
+  .fr-seg { max-width: 100%; overflow-x: auto; }
+  .fr-seg button { flex: 0 0 auto; }
+}
+
+/* 先方レポート。base.css の上に読む。 */
+.rp { max-width: 880px; margin: 0 auto; padding: 40px 32px 56px; }
+.rp-loading, .rp-empty { color: var(--fr-sub); }
+
+.rp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 20px; }
+.rp-to { margin: 0 0 4px; font-size: 15px; }
+.rp-head h1 { font-size: 26px; font-weight: 700; }
+.rp-meta { margin: 6px 0 0; color: var(--fr-sub); }
+.rp-meta .nowrap { white-space: nowrap; }
+.rp-period { padding: 2px 8px; font-size: 14px; }
+@media print { .rp-period { border: 0; padding: 0; appearance: none; } }
+.rp-from { text-align: right; color: var(--fr-sub); font-size: 13px; }
+.rp-from p { margin: 0; }
+
+.rp-hero { display: flex; flex-wrap: wrap; gap: 20px 48px; align-items: flex-end; background: var(--fr-blue-soft); border-radius: var(--fr-radius); padding: 22px 24px; }
+.rp-balance { display: flex; flex-direction: column; gap: 2px; }
+.rp-balance b { font-size: 44px; line-height: 1.15; font-weight: 700; color: var(--fr-blue); letter-spacing: .01em; }
+.rp-balance b.neg { color: var(--fr-err); }
+.rp-label { font-size: 13px; color: var(--fr-sub); }
+.rp-facts { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); gap: 8px 32px; margin: 0; }
+.rp-facts div { display: flex; flex-direction: column; }
+.rp-facts dt { font-size: 12px; color: var(--fr-sub); }
+.rp-facts dd { margin: 0; font-size: 17px; font-weight: 600; }
+
+.rp-bar { height: 12px; background: var(--fr-muted-soft); border-radius: 6px; overflow: hidden; margin-top: 18px; }
+.rp-bar span { display: block; height: 100%; background: var(--fr-blue); }
+.rp-bar-cap { margin: 6px 0 0; font-size: 12px; color: var(--fr-sub); }
+
+.rp-sec { margin-top: 36px; }
+.rp-sec h2 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.rp-chart svg { display: block; }
+
+.rp-table .num { text-align: right; white-space: nowrap; }
+.rp-table .nowrap { white-space: nowrap; }
+.rp-table .strong { font-weight: 700; }
+.rp-table .neg { color: var(--fr-err); }
+.rp-table th { position: static; }
+.rp-table th.num { text-align: right; }
+.rp-table tfoot td { font-weight: 700; background: var(--fr-th); border-top: 1px solid var(--fr-line-strong); }
+.rp-sub { display: block; font-size: 12px; color: var(--fr-sub); }
+.rp-start td { color: var(--fr-sub); }
+.rp-note { margin-top: 28px; font-size: 12px; color: var(--fr-sub); }
+
+@media (max-width: 640px) {
+  .rp { padding: 24px 16px 40px; }
+  .rp-head h1 { font-size: 22px; }
+  .rp-from { text-align: left; }
+  .rp-hero { padding: 18px 16px; }
+  .rp-balance b { font-size: 36px; }
+  .rp-table thead { display: none; }
+  .rp-table, .rp-table tbody, .rp-table tfoot, .rp-table tr, .rp-table td { display: block; width: 100%; }
+  .rp-table tr { border-top: 1px solid var(--fr-line); padding: 10px 0; }
+  .rp-table td { border: 0; padding: 2px 0; text-align: left !important; display: flex; justify-content: space-between; gap: 12px; }
+  .rp-table td:empty { display: none; }
+  .rp-table td[data-label]::before { content: attr(data-label); color: var(--fr-sub); font-size: 12px; font-weight: 400; flex: 0 0 auto; }
+  .rp-table td[data-label="ご依頼"] { display: block; font-weight: 600; }
+  .rp-table td[data-label="ご依頼"]::before { display: none; }
+  .rp-table tfoot td { background: none; border: 0; }
+}
+
+@media print {
+  .rp { padding: 0; max-width: none; }
+  .rp-sec { break-inside: avoid-page; }
+  .rp-detail { break-inside: auto; }
+}
+
+</style>
+</head>
+<body>
+<main id="report" class="rp"><p class="rp-loading">読み込み中…</p></main>
+
+<script>window.REPORT_DATA = {"settings": {"client": "株式会社Let's", "unitMinutes": 20, "unitPrice": 500, "taxNote": "税抜", "categories": ["LP制作", "デザイン", "動画", "修正対応", "打ち合わせ", "リサーチ", "その他"]}, "periods": [{"id": "p_202611", "label": "2026年11月", "start": "2026-11-01", "end": "2026-11-30", "budget": 300000}], "entries": [], "periodId": "p_202611", "generatedAt": "2026/11/07"};</script>
+<script>
+/* 工数の計算（管理画面と先方レポートで共通）。1件ごとに枠（20分）単位で切り上げ、予算から順に引く。 */
+const Kosu = (() => {
+  const yen = (n) => (n < 0 ? "−" : "") + "¥" + Math.abs(Math.round(n)).toLocaleString("ja-JP");
+
+  function hm(minutes) {
+    const m = Math.max(0, Math.round(minutes));
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    if (!h) return `${r}分`;
+    return r ? `${h}時間${r}分` : `${h}時間`;
+  }
+
+  function units(minutes, s) {
+    return minutes > 0 ? Math.ceil(minutes / s.unitMinutes) : 0;
+  }
+
+  function inPeriod(e, p) {
+    return e.date >= p.start && (!p.end || e.date <= p.end);
+  }
+
+  function addDays(iso, n) {
+    const d = new Date(iso + "T00:00:00");
+    d.setDate(d.getDate() + n);
+    return isoDate(d);
+  }
+
+  function isoDate(d) {
+    const z = (v) => String(v).padStart(2, "0");
+    return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`;
+  }
+
+  function daysBetween(a, b) {
+    return Math.round((new Date(b + "T00:00:00") - new Date(a + "T00:00:00")) / 86400000);
+  }
+
+  function summarize(data, period, today = isoDate(new Date())) {
+    const s = data.settings;
+    const list = data.entries
+      .filter((e) => inPeriod(e, period))
+      .sort((a, b) => a.date.localeCompare(b.date) || String(a.createdAt || "").localeCompare(String(b.createdAt || "")));
+
+    let balance = period.budget;
+    const rows = list.map((e) => {
+      const u = units(e.minutes, s);
+      const cost = u * s.unitPrice;
+      balance -= cost;
+      return { ...e, units: u, cost, balance };
+    });
+
+    const used = period.budget - balance;
+    const totalMinutes = rows.reduce((a, r) => a + r.minutes, 0);
+    const totalUnits = rows.reduce((a, r) => a + r.units, 0);
+    const budgetUnits = s.unitPrice ? Math.floor(period.budget / s.unitPrice) : 0;
+    const remainUnits = s.unitPrice ? Math.max(0, Math.floor(balance / s.unitPrice)) : 0;
+
+    const group = (key) => {
+      const map = new Map();
+      for (const r of rows) {
+        const k = r[key] || "（未入力）";
+        const g = map.get(k) || { name: k, count: 0, minutes: 0, units: 0, cost: 0, first: r.date, last: r.date, category: r.category };
+        g.count += 1;
+        g.minutes += r.minutes;
+        g.units += r.units;
+        g.cost += r.cost;
+        g.last = r.date;
+        map.set(k, g);
+      }
+      return [...map.values()].sort((a, b) => b.cost - a.cost || a.name.localeCompare(b.name, "ja"));
+    };
+
+    // 残高の推移：開始日の予算から、記録のある日ごとに減らす
+    const lastDay = period.end || (rows.length ? rows[rows.length - 1].date : today);
+    const points = [{ date: period.start, balance: period.budget }];
+    for (const r of rows) {
+      if (points[points.length - 1].date === r.date) points[points.length - 1].balance = r.balance;
+      else points.push({ date: r.date, balance: r.balance });
+    }
+
+    // このペースで使ったときに残高が0になる日
+    let forecast = null;
+    const through = period.end && today > period.end ? period.end : today;
+    const elapsed = daysBetween(period.start, through) + 1;
+    if (used > 0 && balance > 0 && elapsed > 0 && today >= period.start) {
+      const perDay = used / elapsed;
+      const zeroDay = addDays(through, Math.ceil(balance / perDay));
+      forecast = { perDay, zeroDay, beforeEnd: period.end ? zeroDay <= period.end : true };
+    }
+
+    return {
+      settings: s,
+      period,
+      rows,
+      used,
+      balance,
+      totalMinutes,
+      totalUnits,
+      budgetUnits,
+      remainUnits,
+      remainMinutes: remainUnits * s.unitMinutes,
+      usedRate: period.budget ? used / period.budget : 0,
+      byRequest: group("request"),
+      byCategory: group("category"),
+      points,
+      lastDay,
+      forecast,
+    };
+  }
+
+  function periodFor(data, iso) {
+    return data.periods.find((p) => inPeriod({ date: iso }, p)) || null;
+  }
+
+  function parseMinutes(text) {
+    const t = String(text || "").trim().replace(/[０-９：]/g, (c) => (c === "：" ? ":" : String.fromCharCode(c.charCodeAt(0) - 0xfee0)));
+    if (!t) return NaN;
+    const m = t.match(/^(\d+):(\d{1,2})$/);
+    if (m) return Number(m[1]) * 60 + Number(m[2]);
+    const h = t.match(/^(\d+(?:\.\d+)?)\s*(h|時間)$/i);
+    if (h) return Math.round(Number(h[1]) * 60);
+    return /^\d+$/.test(t.replace(/分$/, "")) ? Number(t.replace(/分$/, "")) : NaN;
+  }
+
+  function fmtDate(iso, withYear = false) {
+    const [y, m, d] = iso.split("-").map(Number);
+    const w = "日月火水木金土"[new Date(y, m - 1, d).getDay()];
+    return `${withYear ? y + "/" : ""}${m}/${d}（${w}）`;
+  }
+
+  /* 残高の推移グラフ（SVG）。線は1本、色は青だけ。 */
+  function balanceChart(sum, { width = 640, height = 220 } = {}) {
+    const pad = { l: 64, r: 16, t: 14, b: 28 };
+    const w = width - pad.l - pad.r;
+    const h = height - pad.t - pad.b;
+    const start = sum.period.start;
+    const end = sum.lastDay > start ? sum.lastDay : addDays(start, 1);
+    const span = Math.max(1, daysBetween(start, end));
+    const max = Math.max(sum.period.budget, ...sum.points.map((p) => p.balance));
+    const min = Math.min(0, ...sum.points.map((p) => p.balance));
+    const x = (iso) => pad.l + (Math.min(span, Math.max(0, daysBetween(start, iso))) / span) * w;
+    const y = (v) => pad.t + ((max - v) / (max - min || 1)) * h;
+
+    let d = `M${x(sum.points[0].date)},${y(sum.points[0].balance)}`;
+    for (let i = 1; i < sum.points.length; i++) {
+      d += ` H${x(sum.points[i].date)} V${y(sum.points[i].balance)}`;
+    }
+    const lastPoint = sum.points[sum.points.length - 1];
+    const today = isoDate(new Date());
+    const lineEnd = sum.period.end && today < sum.period.end ? (today > lastPoint.date ? today : lastPoint.date) : end;
+    d += ` H${x(lineEnd)}`;
+
+    const ticks = [0, 0.5, 1].map((t) => min + (max - min) * t);
+    const grid = ticks
+      .map((v) => `<line x1="${pad.l}" x2="${pad.l + w}" y1="${y(v)}" y2="${y(v)}" stroke="#eceef2"/>` +
+        `<text x="${pad.l - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#6b6f78">${yen(v)}</text>`)
+      .join("");
+    const xl = [start, end]
+      .map((iso, i) => `<text x="${x(iso)}" y="${height - 8}" text-anchor="${i ? "end" : "start"}" font-size="11" fill="#6b6f78">${fmtDate(iso)}</text>`)
+      .join("");
+    const dots = sum.points.slice(1)
+      .map((p) => `<circle cx="${x(p.date)}" cy="${y(p.balance)}" r="3" fill="#285bc6"><title>${fmtDate(p.date)} 残高 ${yen(p.balance)}</title></circle>`)
+      .join("");
+    return `<svg viewBox="0 0 ${width} ${height}" width="100%" role="img" aria-label="残高の推移">${grid}${xl}` +
+      `<path d="${d}" fill="none" stroke="#285bc6" stroke-width="2"/>${dots}</svg>`;
+  }
+
+  return { yen, hm, units, summarize, periodFor, parseMinutes, fmtDate, isoDate, addDays, balanceChart };
+})();
+
+/* 先方に見せる作業時間レポート。書き出したHTMLでは window.REPORT_DATA を使い、ローカルでは /api/data を読む。 */
+(async () => {
+  const el = document.getElementById("report");
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const { yen, hm, fmtDate } = Kosu;
+
+  let data = window.REPORT_DATA;
+  let periodId = data?.periodId;
+  if (!data) {
+    const res = await fetch("/api/data");
+    data = (await res.json()).data;
+    periodId = new URLSearchParams(location.search).get("period");
+  }
+  if (!data.periods.length) {
+    el.innerHTML = `<p class="rp-loading">期間が登録されていません。</p>`;
+    return;
+  }
+  draw(periodId);
+  el.addEventListener("change", (ev) => {
+    if (ev.target.id === "rpPeriod") draw(ev.target.value);
+  });
+
+  function draw(id) {
+  const period = data.periods.find((p) => p.id === id) || data.periods[data.periods.length - 1];
+  const picker = data.periods.length > 1
+    ? `<select id="rpPeriod" class="rp-period" aria-label="表示する期間">${[...data.periods].reverse()
+      .map((p) => `<option value="${esc(p.id)}"${p.id === period.id ? " selected" : ""}>${esc(p.label || p.start)}</option>`).join("")}</select>`
+    : esc(period.label || "");
+  const sum = Kosu.summarize(data, period);
+  const s = sum.settings;
+  const tax = s.taxNote ? `（${esc(s.taxNote)}）` : "";
+  const range = `<span class="nowrap">${fmtDate(period.start, true)}</span> 〜 ${period.end ? `<span class="nowrap">${fmtDate(period.end, true)}</span>` : ""}`;
+  const made = data.generatedAt || Kosu.isoDate(new Date()).replace(/-/g, "/");
+  const over = sum.balance < 0;
+  const usedPct = Math.min(100, Math.round(sum.usedRate * 1000) / 10);
+
+  const requestRows = sum.byRequest
+    .map((g) => `<tr>
+      <td data-label="ご依頼">${esc(g.name)}<span class="rp-sub">${esc(g.category || "")}</span></td>
+      <td data-label="対応回数" class="num">${g.count}回</td>
+      <td data-label="作業時間" class="num">${hm(g.minutes)}</td>
+      <td data-label="枠" class="num">${g.units}枠</td>
+      <td data-label="金額" class="num strong">${yen(g.cost)}</td>
+    </tr>`)
+    .join("");
+
+  const detailRows = sum.rows
+    .map((r) => `<tr>
+      <td data-label="日付" class="nowrap">${fmtDate(r.date)}</td>
+      <td data-label="ご依頼">${esc(r.request)}${r.detail ? `<span class="rp-sub">${esc(r.detail)}</span>` : ""}</td>
+      <td data-label="作業時間" class="num">${hm(r.minutes)}</td>
+      <td data-label="枠" class="num">${r.units}枠</td>
+      <td data-label="金額" class="num">−${yen(r.cost)}</td>
+      <td data-label="残高" class="num strong${r.balance < 0 ? " neg" : ""}">${yen(r.balance)}</td>
+    </tr>`)
+    .join("");
+
+  el.innerHTML = `
+    <header class="rp-head">
+      <div>
+        <p class="rp-to">${esc(s.client)} 様</p>
+        <h1>作業時間のご報告</h1>
+        <p class="rp-meta">${picker}　${range}</p>
+      </div>
+      <div class="rp-from">
+        <p>作成日 ${esc(made)}</p>
+        <p>La plus 葛西</p>
+      </div>
+    </header>
+
+    <section class="rp-hero">
+      <div class="rp-balance">
+        <span class="rp-label">${over ? "ご契約額を超えた分" : "残高"}</span>
+        <b class="${over ? "neg" : ""}">${yen(over ? -sum.balance : sum.balance)}</b>
+        <span class="rp-label">残り ${hm(sum.remainMinutes)}（${sum.remainUnits}枠）</span>
+      </div>
+      <dl class="rp-facts">
+        <div><dt>ご契約額</dt><dd>${yen(period.budget)}</dd></div>
+        <div><dt>ご利用額</dt><dd>${yen(sum.used)}</dd></div>
+        <div><dt>作業時間</dt><dd>${hm(sum.totalMinutes)}</dd></div>
+        <div><dt>対応件数</dt><dd>${sum.byRequest.length}件・${sum.rows.length}回</dd></div>
+      </dl>
+    </section>
+
+    <div class="rp-bar" aria-label="ご利用 ${usedPct}%">
+      <span style="width:${usedPct}%"></span>
+    </div>
+    <p class="rp-bar-cap">ご利用 ${usedPct}%　／　料金 ${s.unitMinutes}分 ${yen(s.unitPrice)}${tax}・全${sum.budgetUnits}枠（${hm(sum.budgetUnits * s.unitMinutes)}）</p>
+
+    <section class="rp-sec">
+      <h2>残高の推移</h2>
+      <div class="rp-chart">${Kosu.balanceChart(sum, { width: Math.max(300, el.clientWidth - 2 * parseFloat(getComputedStyle(el).paddingLeft)), height: 220 })}</div>
+    </section>
+
+    <section class="rp-sec">
+      <h2>ご依頼ごとの内訳</h2>
+      ${sum.byRequest.length ? `<table class="fr-table rp-table">
+        <thead><tr><th>ご依頼</th><th class="num">対応回数</th><th class="num">作業時間</th><th class="num">枠</th><th class="num">金額</th></tr></thead>
+        <tbody>${requestRows}</tbody>
+        <tfoot><tr><td>合計</td><td data-label="対応回数" class="num">${sum.rows.length}回</td><td data-label="作業時間" class="num">${hm(sum.totalMinutes)}</td><td data-label="枠" class="num">${sum.totalUnits}枠</td><td data-label="金額" class="num strong">${yen(sum.used)}</td></tr></tfoot>
+      </table>` : `<p class="rp-empty">この期間の作業はまだありません。</p>`}
+    </section>
+
+    <section class="rp-sec">
+      <h2>作業の明細</h2>
+      ${sum.rows.length ? `<table class="fr-table rp-table rp-detail">
+        <thead><tr><th>日付</th><th>ご依頼・内容</th><th class="num">作業時間</th><th class="num">枠</th><th class="num">金額</th><th class="num">残高</th></tr></thead>
+        <tbody>
+          <tr class="rp-start"><td data-label="日付" class="nowrap">${fmtDate(period.start)}</td><td data-label="ご依頼">ご契約額</td><td></td><td></td><td></td><td data-label="残高" class="num strong">${yen(period.budget)}</td></tr>
+          ${detailRows}
+        </tbody>
+      </table>` : `<p class="rp-empty">この期間の作業はまだありません。</p>`}
+    </section>
+
+    <p class="rp-note">作業時間は1回の対応ごとに${s.unitMinutes}分単位で切り上げ、1枠 ${yen(s.unitPrice)}${tax}でご契約額から差し引いています。</p>
+  `;
+  document.title = `作業時間のご報告｜${s.client}様 ${period.label || ""}`;
+  }
+})();
+
+</script>
+</body>
+</html>
